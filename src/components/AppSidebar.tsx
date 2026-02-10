@@ -3,6 +3,7 @@ import { NavLink } from '@/components/NavLink';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '@/services/auth';
 import { trackEvent } from '@/telemetry/telemetry';
+import logoWhite from '@/assets/logo-white.png';
 
 const navItems = [
   { title: 'Overview', path: '/overview', icon: LayoutDashboard },
@@ -23,7 +24,7 @@ export function AppSidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-56 flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex h-14 items-center px-6">
-        <span className="text-lg font-bold tracking-wide text-sidebar-foreground">Vetrya</span>
+        <img src={logoWhite} alt="Vetrya" className="h-8 w-auto" />
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 px-3 pt-4">
