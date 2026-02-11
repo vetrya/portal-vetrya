@@ -1,8 +1,6 @@
 import { LayoutDashboard, BarChart3, User, LogOut } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
-import { useNavigate } from 'react-router-dom';
-import { logout } from '@/services/auth';
-import { trackEvent } from '@/telemetry/telemetry';
+import { useAuth } from '@/state/AuthContext';
 import logoWhite from '@/assets/logo-white.png';
 
 const navItems = [
@@ -12,14 +10,7 @@ const navItems = [
 ];
 
 export function AppSidebar() {
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    trackEvent('logout');
-    await logout();
-    navigate('/');
-    window.location.reload();
-  };
+  const { handleLogout } = useAuth();
 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-56 flex-col bg-sidebar text-sidebar-foreground">
