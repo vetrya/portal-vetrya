@@ -3,9 +3,10 @@ import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/state/AuthContext';
 import logoWhite from '@/assets/logo-white.png';
 
+const streamlitUrl = import.meta.env.VITE_STREAMLIT_URL || '#';
+
 const navItems = [
   { title: 'Overview', path: '/overview', icon: LayoutDashboard },
-  { title: 'Dashboards', path: '/dashboards', icon: BarChart3 },
   { title: 'Account', path: '/account', icon: User },
 ];
 
@@ -30,6 +31,14 @@ export function AppSidebar() {
             <span>{item.title}</span>
           </NavLink>
         ))}
+
+        <a
+          href={streamlitUrl}
+          className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+        >
+          <BarChart3 className="h-4 w-4" />
+          <span>Dashboards</span>
+        </a>
 
         <button
           onClick={logout}
