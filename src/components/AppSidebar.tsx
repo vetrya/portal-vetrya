@@ -10,7 +10,7 @@ const navItems = [
 ];
 
 export function AppSidebar() {
-  const { handleLogout } = useAuth();
+  const { logout } = useAuth();
 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-56 flex-col bg-sidebar text-sidebar-foreground">
@@ -32,7 +32,7 @@ export function AppSidebar() {
         ))}
 
         <button
-          onClick={handleLogout}
+          onClick={logout}
           className="mt-auto flex items-center gap-3 rounded-md px-3 py-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         >
           <LogOut className="h-4 w-4" />
