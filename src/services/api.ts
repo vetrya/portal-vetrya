@@ -23,8 +23,9 @@ export async function apiRequest<T = unknown>(
   });
 
   if (response.status === 401) {
-    window.location.href = `${API_BASE_URL}/login`;
-    throw new Error('Unauthorized');
+    const error = new Error('Unauthorized');
+    (error as any).status = 401;
+    throw error;
   }
 
   if (!response.ok) {
