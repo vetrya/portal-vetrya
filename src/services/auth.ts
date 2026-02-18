@@ -1,23 +1,29 @@
 import { apiRequest } from './api';
 
 export interface UserProfile {
-  name: string;
+  name?: string;
   email: string;
-  provider: string;
+  provider?: string;
 }
 
+// ============================
+// Busca usuário autenticado
+// ============================
 export async function fetchCurrentUser(): Promise<UserProfile> {
   return apiRequest<UserProfile>('/me');
 }
 
-export async function logout(): Promise<void> {
+// ============================
+// Logout (redirect real)
+// ============================
+export function logout(): void {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
-  await fetch(`${API_BASE_URL}/logout`, {
-    method: 'POST',
-    credentials: 'include',
-  });
+  window.location.href = `${API_BASE_URL}/logout`;
 }
 
+// ============================
+// Redireciona para login
+// ============================
 export function redirectToLogin(): void {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
   window.location.href = `${API_BASE_URL}/login`;

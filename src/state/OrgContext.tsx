@@ -1,5 +1,13 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { trackEvent } from '@/telemetry/telemetry';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useCallback,
+} from "react";
+import { apiRequest, setApiOrgId } from "@/services/api";
+import { useAuth } from "@/state/AuthContext";
 
 export interface Organization {
   id: string;
@@ -8,17 +16,15 @@ export interface Organization {
 
 interface OrgState {
   orgId: string | null;
-  orgName: string | null;
   organizations: Organization[];
-  selectOrg: (org: Organization) => void;
+  selectOrg: (org: Organization) => Promise<void>;
   loading: boolean;
 }
 
 const OrgContext = createContext<OrgState>({
   orgId: null,
-  orgName: null,
   organizations: [],
-  selectOrg: () => {},
+  selectOrg: async () => {},
   loading: true,
 });
 
@@ -26,45 +32,84 @@ export function useOrg() {
   return useContext(OrgContext);
 }
 
-const MOCK_ORGS: Organization[] = [
-  { id: 'org-1', name: 'Vetrya Corp' },
-  { id: 'org-2', name: 'Acme Inc' },
-];
-
 export function OrgProvider({ children }: { children: ReactNode }) {
-  const [orgId, setOrgId] = useState<string | null>(null);
-  const [orgName, setOrgName] = useState<string | null>(null);
+  const { user, refresh } = useAuth();
+
+  const [orgId, setOrgIdState] = useState<string | null>(null);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const stored = localStorage.getItem('vetrya_org');
+  // 🔥 Sincroniza org_id do backend
+ useEffect(() => {
+   if (!user) return;
 
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as Organization;
-        setOrgId(parsed.id);
-        setOrgName(parsed.name);
-      } catch {
-        localStorage.removeItem('vetrya_org');
-      }
-    }
+   const initialize = async () => {
+     setLoading(true);
 
+     try {
+       // 🔥 Sempre buscar organizações reais do usuário
+       const data = await apiRequest<{ organizations: Organization[] }>(
+         "/organizations"
+       );
+
+       setOrganizations(data.organizations);
+
+       // Se já houver org definida no backend
+       if (user.org_id) {
+         setOrgIdState(user.org_id);
+         setApiOrgId(user.org_id);
+       }
+     } catch (err) {
+       console.error("Failed to initialize org context", err);
+       setOrganizations([]);
+     } finally {
+       setLoading(false);
+     } 
+   };
+
+  void initialize();
+}, [user]);
+
+
+
+  const loadOrganizations = async () => {
+  setLoading(true);
+
+  try {
+    const data = await apiRequest<{ organizations: Organization[] }>(
+      "/organizations"
+    );
+    setOrganizations(data.organizations);
+  } catch (err) {
+    console.error("Failed to load organizations", err);
+    setOrganizations([]);
+  } finally {
     setLoading(false);
-  }, []);
+  }
+};
 
-  const selectOrg = useCallback((org: Organization) => {
-    setOrgId(org.id);
-    setOrgName(org.name);
-    localStorage.setItem('vetrya_org', JSON.stringify(org));
-    trackEvent('organization_selected');
-  }, []);
+
+  const selectOrg = useCallback(
+    async (org: Organization) => {
+      await apiRequest("/select-organization", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ org_id: org.id }),
+      });
+
+      setOrgIdState(org.id);
+      setApiOrgId(org.id);
+
+      await refresh(); // 🔥 atualiza usuário
+    },
+    [refresh]
+  );
 
   return (
     <OrgContext.Provider
       value={{
         orgId,
-        orgName,
-        organizations: MOCK_ORGS,
+        organizations,
         selectOrg,
         loading,
       }}

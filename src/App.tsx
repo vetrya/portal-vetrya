@@ -15,8 +15,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <AuthProvider>
-        <AuthGate>
-          <OrgProvider>
+        <OrgProvider>
+          <AuthGate>
             <Routes>
               <Route path="/" element={<Navigate to="/overview" replace />} />
               <Route element={<AppLayout />}>
@@ -26,8 +26,8 @@ const App = () => (
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </OrgProvider>
-        </AuthGate>
+          </AuthGate>
+        </OrgProvider>
       </AuthProvider>
     </BrowserRouter>
   </QueryClientProvider>

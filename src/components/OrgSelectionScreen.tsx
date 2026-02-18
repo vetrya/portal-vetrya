@@ -9,7 +9,7 @@ export function OrgSelectionScreen() {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <Card className="w-full max-w-md border-border">
         <CardHeader>
-          <CardTitle className="text-center text-foreground">Select Organization</CardTitle>
+          <CardTitle className="text-center text-foreground">Selecione a Empresa</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {organizations.map((org: Organization) => (

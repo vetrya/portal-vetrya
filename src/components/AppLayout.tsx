@@ -7,9 +7,9 @@ import { OrgSelectionScreen } from '@/components/OrgSelectionScreen';
 import { trackEvent } from '@/telemetry/telemetry';
 
 const pageTitles: Record<string, string> = {
-  '/overview': 'Overview',
-  '/dashboards': 'Dashboards',
-  '/account': 'Account',
+  '/overview': 'Painel Executivo',
+  '/dashboards': 'Painéis de Controle',
+  '/account': 'Conta',
 };
 
 export function AppLayout() {
@@ -23,7 +23,7 @@ export function AppLayout() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-muted-foreground">Loading organizations…</p>
+        <p className="text-muted-foreground">Carregando organizações...</p>
       </div>
     );
   }
@@ -32,7 +32,7 @@ export function AppLayout() {
     return <OrgSelectionScreen />;
   }
 
-  const title = pageTitles[location.pathname] || 'Vetrya';
+  const title = pageTitles[location.pathname] || 'Portal Vetrya';
 
   return (
     <div className="min-h-screen bg-background">

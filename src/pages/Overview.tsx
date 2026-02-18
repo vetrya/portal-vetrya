@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const cards = [
-  { title: 'System Status', content: 'All systems operational' },
-  { title: 'Usage Metrics', content: 'Data loading from backend' },
-  { title: 'Notifications', content: 'No new notifications' },
+  { title: 'Status do Sistema', content: 'Todos os sistemas estão funcionando normalmente' },
+  { title: 'Métricas de Uso', content: 'Dados carregados com sucesso '},
+  { title: 'Notificações', content: 'Sem novas notificações' },
 ];
 
 export default function Overview() {

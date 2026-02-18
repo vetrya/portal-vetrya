@@ -50,8 +50,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await logoutService();
     } finally {
       // Ensure local state is cleared even if the network fails.
-      setUser(null);
-      setLoading(false);
+	  setUser(null);
+	  setLoading(false);
+
+	  // 🔥 marcar que foi logout manual
+	  sessionStorage.setItem("manual_logout", "true");
+
     }
   }, []);
 

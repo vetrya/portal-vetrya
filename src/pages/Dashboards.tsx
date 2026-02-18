@@ -3,16 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ExternalLink } from 'lucide-react';
 
 export default function Dashboards() {
-  const streamlitUrl = import.meta.env.VITE_STREAMLIT_URL || '#';
-
   const handleOpen = () => {
-    window.location.href = streamlitUrl;
+    window.location.href = 'http://localhost:8000/streamlit-entry';
   };
 
   return (
     <Card className="max-w-md border-border">
       <CardHeader>
-        <CardTitle className="text-base font-semibold text-foreground">Analytics Dashboard</CardTitle>
+        <CardTitle className="text-base font-semibold text-foreground">
+          Analytics Dashboard
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Button onClick={handleOpen} className="gap-2">
